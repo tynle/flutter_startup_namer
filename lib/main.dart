@@ -86,11 +86,11 @@ class RandomWordsState extends State<RandomWords> {
                       pair.asPascalCase,
                       style: _biggerFont,
                     ),
-                    trailing: new Icon(Icons.delete, color: Colors.red),
+                    trailing: new Icon(Icons.delete, color: Colors.blueGrey),
                     onTap: () {
-                      setState(() {
-                         _saved.remove(pair);
-                      });
+                        _saved.remove(pair);
+                        Navigator.of(context).pop();
+                        _pushSaved();                    
                     } 
                   );
                 },
