@@ -75,7 +75,7 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
-  void _pushSaved() {
+  /*void _pushSaved() {
     Navigator.of(context).push(
       new MaterialPageRoute<void>(
           builder: (BuildContext context) {
@@ -108,16 +108,11 @@ class RandomWordsState extends State<RandomWords> {
             );
           })
     );
-  }
-  /*void _pushSaved()  {
+  }*/
+  void _pushSaved()  {
     Navigator.of(context).push(
       new MaterialPageRoute(builder: (BuildContext context){
-        Widget favor = ListView.builder(itemBuilder: (context, i) {
-          if(i.isOdd) return Divider();
-          final index = i ~/ 2;
-          if(index >= _saved.length) return Divider();
-          return _buildFavorRow(_saved.elementAt(index));
-        });
+        final Widget favor = _buildFavorPage(_saved);
         return new Scaffold(
           appBar: new AppBar(
             title: const Text('Saved suggestions'),
@@ -128,18 +123,28 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
+  Widget _buildFavorPage(Set<WordPair> list) {
+    return ListView.builder(itemBuilder: (context, i) {
+          if(i.isOdd) return Divider();
+          final index = i ~/ 2;
+          if(index >= list.length) return Divider();
+          return _buildFavorRow(list.elementAt(index));
+        });
+  }
+
   Widget _buildFavorRow(WordPair pair)
   {
     return ListTile(
       title: Text(pair.asPascalCase, style: _biggerFont),
       trailing: new Icon(Icons.delete, color: Colors.red),
       onTap: (){
-        setState(() {
-          _saved.remove(pair);
-        });
+        _saved.remove(pair);
+        //_buildFavorPage(_saved);
+        Navigator.of(context).pop();
+        _pushSaved();
       },
     );
-  }*/
+  }
 }
 
 class RandomWords extends StatefulWidget {
