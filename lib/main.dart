@@ -43,7 +43,7 @@ class RandomWordsState extends State<RandomWords> {
           })
         ],
       ),
-      body: showFavor ? _buildFavorPage(_saved) :_buildSuggestion(),
+      body: showFavor ? _buildFavorPage() :_buildSuggestion(),
     );
   }
 
@@ -129,23 +129,25 @@ class RandomWordsState extends State<RandomWords> {
     );
   }*/
 
-  Widget _buildFavorPage(Set<WordPair> list) {
+  Widget _buildFavorPage() {
     return ListView.builder(itemBuilder: (context, i) {
           if(i.isOdd) return Divider();
-          final index = i ~/ 2;
-          if(index >= list.length) return Divider();
-          return _buildFavorRow(list.elementAt(index));
-        });
+          final int index = i ~/ 2;
+          if(index >= _saved.length) return null;
+          return _buildFavorRow(_saved.elementAt(index));
+        },
+        itemCount: _saved.length * 2,);
   }
 
   Widget _buildFavorRow(WordPair pair)
   {
     return ListTile(
       title: Text(pair.asPascalCase, style: _biggerFont),
-      trailing: new Icon(Icons.delete, color: Colors.red),
+      trailing: new Icon(Icons.delete, color: Colors.blueGrey),
       onTap: (){
         setState(() {
-          _saved.remove(pair);     
+          _saved.remove(pair);
+          if(_saved.isEmpty) showFavor = false;               
         });        
       },
     );
