@@ -25,19 +25,25 @@ class RandomWordsState extends State<RandomWords> {
   final List<WordPair> _suggestions = <WordPair>[];
   final Set<WordPair> _saved = new Set<WordPair>();
   final TextStyle _biggerFont = TextStyle(fontSize: 18.0);
+  bool showFavor = false;
 
   @override
   Widget build(BuildContext context) {
     //final wordPair = WordPair.random();
     //return Text(wordPair.asPascalCase);
+    
     return Scaffold(
       appBar: AppBar(
-        title: Text('Starup Name Generator'),
+        title: showFavor ? Text('Favorite names') : Text('Starup Name Generator'),
         actions: <Widget>[
-          new IconButton(icon: const Icon(Icons.list), onPressed: _pushSaved)
+          new IconButton(icon: showFavor ? Icon(Icons.arrow_back): Icon(Icons.list), onPressed: () {
+            setState(() {
+               showFavor = !showFavor;           
+            });            
+          })
         ],
       ),
-      body: _buildSuggestion(),
+      body: showFavor ? _buildFavorPage(_saved) :_buildSuggestion(),
     );
   }
 
@@ -109,7 +115,7 @@ class RandomWordsState extends State<RandomWords> {
           })
     );
   }*/
-  void _pushSaved()  {
+  /*void _pushSaved()  {
     Navigator.of(context).push(
       new MaterialPageRoute(builder: (BuildContext context){
         final Widget favor = _buildFavorPage(_saved);
@@ -121,7 +127,7 @@ class RandomWordsState extends State<RandomWords> {
         );
       })
     );
-  }
+  }*/
 
   Widget _buildFavorPage(Set<WordPair> list) {
     return ListView.builder(itemBuilder: (context, i) {
@@ -138,10 +144,9 @@ class RandomWordsState extends State<RandomWords> {
       title: Text(pair.asPascalCase, style: _biggerFont),
       trailing: new Icon(Icons.delete, color: Colors.red),
       onTap: (){
-        _saved.remove(pair);
-        //_buildFavorPage(_saved);
-        Navigator.of(context).pop();
-        _pushSaved();
+        setState(() {
+          _saved.remove(pair);     
+        });        
       },
     );
   }
